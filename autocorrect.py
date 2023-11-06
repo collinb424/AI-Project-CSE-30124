@@ -81,7 +81,11 @@ class AutoCorrect:
 
     def two_edits(self, word): 
         "All edits that are two edits away from `word`."
-        return (e2 for e1 in self.one_edit(word) for e2 in self.one_edit(e1))
+        one_edit_away = self.one_edit(word)
+        
+        for first_edit in one_edit_away:
+            for second_edit in self.one_edit(first_edit):
+                yield second_edit
 
 
 
