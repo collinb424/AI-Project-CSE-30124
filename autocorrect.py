@@ -1,5 +1,6 @@
 import re
 from collections import defaultdict
+from string import punctuation
 
 class AutoCorrect:
     def __init__(self):
@@ -9,22 +10,46 @@ class AutoCorrect:
         self.count_words()
     
     def count_words(self):
-        words = self.get_words(open('data/large.txt').read())
+        '''
+        Reads words from a file and counts their occurrences. This data is used for calculating word 
+        probabilities later.
+        '''
+
+        with open('big.txt') as file:
+            words = self.get_words(file.read())
         self.total_words = len(words)
         for word in words:
             self.words_count[word] += 1
 
     def get_words(self, text): 
+        '''
+        Extracts words from a given text string, converting them to lowercase.
+        '''
+
         return re.findall(r'\w+', text.lower())
     
     def word_probability(self, word): 
-        "Probability of `word`."
+        '''
+        Calculates the probability of a word based on its frequency in the text.
+        '''
+
         return self.words_count[word] / self.total_words
 
     def correct_word(self, word): 
-        "Most probable spelling correction for word."
-        if word in self.cache:
-            return self.cache[word]
+        '''
+        Attempts to find the most probable correct form of a given word.
+        It utilizes caching for efficiency.
+        '''
+
+        # Handle punctuation at the end of the word
+        end = ''
+        if word[-1] in punctuation:
+            end = word[-1]
+            word = word[:-1]
+        if word.lower() in self.words_count:
+            return word if not end else word + end
+        if word.lower() in self.cache:
+            return self.cache[word] if not end else self.cache[word] + end
         
         max_probability = 0
         corrected_word = word
@@ -35,44 +60,67 @@ class AutoCorrect:
                 corrected_word = possibility
 
         self.cache[word] = corrected_word
-        return corrected_word   
+        return corrected_word if not end else corrected_word + end 
 
     def possibilities(self, word): 
-        "Generate possible spelling corrections for word."
-        return (self.validate_word([word]) or self.validate_word(self.one_edit(word)) 
-                or self.validate_word(self.two_edits(word)) or [word])
+        '''
+        Generates a set of possible corrections for a given word, considering
+        validated words, one-edit and two-edit distance words.
+        '''
+
+        valid_words = self.validate_word([word])
+        if valid_words:
+            return valid_words
+
+        one_edit_words = self.validate_word(self.one_edit(word))
+        if one_edit_words:
+            return one_edit_words
+
+        two_edit_words = self.validate_word(self.two_edits(word))
+        return two_edit_words if two_edit_words else [word]  
+
 
     def validate_word(self, words): 
-        "The subset of `words` that appear in the dictionary of WORDS."
-        return set(w for w in words if w in self.words_count)
+        '''
+        Filters a list of words, keeping only those that exist in the known words dictionary.
+        '''
+        exist = set()
+        for word in words:
+            if word in self.words_count:
+                exist.add(word)
+        return exist
 
     def one_edit(self, word):
-        "All edits that are one edit away from `word`."
+        '''
+        Generates all possible words that are one edit distance away from the given word.
+        Edits include deletion, transposition, replacement, and insertion of characters.
+        '''
+
         alphabet = 'abcdefghijklmnopqrstuvwxyz'
         one_edit_words = set()
 
-        # Create all possible splits of the word.
+        # Create all possible splits of the word
         splits = []
         for i in range(len(word) + 1):
             splits.append((word[:i], word[i:]))
 
-        # Delete operation: remove one character.
+        # Remove one character
         for left, right in splits:
             if right:
                 one_edit_words.add(left + right[1:])
 
-        # Transpose operation: swap two adjacent characters.
+        # Swap two adjacent characters
         for left, right in splits:
             if len(right) > 1:
                 one_edit_words.add(left + right[1] + right[0] + right[2:])
 
-        # Replace operation: change one character to another.
+        # Change one character to another
         for left, right in splits:
             if right:
                 for char in alphabet:
                     one_edit_words.add(left + char + right[1:])
 
-        # Insert operation: add one character.
+        # Add one character
         for left, right in splits:
             for char in alphabet:
                 one_edit_words.add(left + char + right)
@@ -80,13 +128,15 @@ class AutoCorrect:
         return one_edit_words
 
     def two_edits(self, word): 
-        "All edits that are two edits away from `word`."
-        one_edit_away = self.one_edit(word)
-        
-        for first_edit in one_edit_away:
-            for second_edit in self.one_edit(first_edit):
-                yield second_edit
+        '''
+        Creates words that are two edits away from the given word by applying one-edit operations twice.
+        '''
 
+        two_edit_words = set()
+        for e1 in self.one_edit(word):
+            for e2 in self.one_edit(e1):
+                two_edit_words.add(e2)
+        return two_edit_words
 
 
 def main():
@@ -94,7 +144,8 @@ def main():
     print(a.correct_word('artifcil'))
     print(a.correct_word('incorect'))
     print(a.correct_word('teh'))
-
+    print(a.correct_word('Heey'))
+    print(a.correct_word('Heey?'))
 
 if __name__ == "__main__":
     main()
