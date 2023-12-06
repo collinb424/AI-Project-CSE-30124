@@ -43,8 +43,7 @@ class TextEditor:
 
         if words:
             last_word = words[-1]
-            print(last_word)
-        
+                    
             # if last_word[-1] not in punctuation:
             corrected_word = self.autocorrect.correct_word(last_word)
             if corrected_word != last_word:

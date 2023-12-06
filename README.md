@@ -11,7 +11,7 @@ This project is a text editor built in Python, featuring autocorrect and next-wo
 - These counts are used to compute probabilities to decide the most probable correction for the user’s misspelled word.
 
 
-### next-word.py
+### next_word.py
 - This file includes the `TextProcessor` and `NextWordPredictor` classes.
 - The `TextProcessor` class is used for reading and processing text data from `data/sentences.txt` by tokenizing sentences and creating padded sequences.
 - The `NextWordPredictor` class uses TensorFlow and Keras to build and train an LSTM model for predicting the next word in a sentence.
@@ -30,7 +30,7 @@ This project is a text editor built in Python, featuring autocorrect and next-wo
    $ git clone https://github.com/collinb424/AI-Project-CSE-30124.git
    ```
 2. **Ensure all necessary files are present**:
-   - Ensure you have the following python files: `text-editor.py`, `autocorrect.py`, `next-word.py`.
+   - Ensure you have the following python files: `text-editor.py`, `autocorrect.py`, `next_word.py`.
    - Ensure you have the following text files in the data folder: `data/large.text`, `data/sentences.txt`.
    - Ensure you have the model so that you don't need to spend time retraining it: `my_model.h5`
 3. **Install Dependencies**:
