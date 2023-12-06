@@ -2,6 +2,14 @@
 
 This project is a text editor built in Python, featuring autocorrect and next-word prediction capabilities.
 
+## Example Usage
+
+
+https://github.com/collinb424/AI-Project-CSE-30124/assets/92958582/0bdd9183-d7f0-43e0-9cdc-65ac0f9cd9cb
+
+
+
+
 ## File Description
 
 ### autocorrect.py
