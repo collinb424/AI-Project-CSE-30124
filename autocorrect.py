@@ -15,7 +15,7 @@ class AutoCorrect:
         probabilities later.
         '''
 
-        with open('big.txt') as file:
+        with open('data/large.txt') as file:
             words = self.get_words(file.read())
         self.total_words = len(words)
         for word in words:

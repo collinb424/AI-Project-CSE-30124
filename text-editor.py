@@ -23,7 +23,7 @@ class TextEditor:
 
         # Initializing AutoCorrect and NextWordPredictor
         self.autocorrect = AutoCorrect()
-        self.processor = TextProcessor('test.txt')
+        self.processor = TextProcessor('data/sentences.txt')
         self.processor.prepare_data()
         self.predictor = NextWordPredictor.load('my_model.h5', self.processor.tokenizer, self.processor.max_seq_length)
         self.next_word_suggestion = ''

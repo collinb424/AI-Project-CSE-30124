@@ -62,7 +62,7 @@ class NextWordPredictor:
 
     def build_model(self):
         '''
-        Builds a simple LSTM model for next-word prediction.
+        Builds an LSTM model for next-word prediction.
         '''
 
         # Follow the typical steps for setting up and training an LSTM model
@@ -141,7 +141,7 @@ def load_or_train_model(X, y, processor):
         print("Training new model...")
         return train_model(X, y, processor)
 
-processor = TextProcessor('test.txt')
+processor = TextProcessor('data/sentences.txt')
 sequences = processor.prepare_data()
 X, y = sequences[:, :-1], sequences[:, -1]
 y = tf.keras.utils.to_categorical(y, num_classes=len(processor.tokenizer.word_index) + 1)
