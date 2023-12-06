@@ -23,5 +23,24 @@ This project is a text editor built in Python, featuring autocorrect and next-wo
 
 ## Setup and Running Instructions
 
+1. **Clone this repository to your local machine**:
+   ```bash
+   $ git clone https://github.com/collinb424/AI-Project-CSE-30124.git
+   ```
 1. **Install Dependencies**:
-   Ensure Python is installed on your system. Install necessary packages using:
+   - Ensure Python is installed on your system.
+   - Also ensure you have pip installed on your system.
+   - Then install necessary packages using:
+   ```
+   pip install numpy tensorflow re tkinter
+   ```
+2. **Run the Text Editor**:
+   - Run `text-editor.py` to start the application:
+   ```
+   python3 text-editor.py
+   ```
+3. **Using the Text Editor**:
+   - The text editor will open in a new window.
+   - Simply start typing your text.
+   - If you mistype a word and press space, the editor will automatically correct it to the most likely intended word.
+   - Upon hitting the space bar, a suggestion for the next word will appear in gray. To accept this suggestion, press Tab. If you wish to ignore it, just keep typing as usual.
